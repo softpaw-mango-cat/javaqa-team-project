@@ -72,4 +72,13 @@ public class CreditAccountTest {
         Assertions.assertFalse(result);
         Assertions.assertEquals(0, account.getBalance());
     }
+    @Test
+    public void NotOverflowOnLargeValues() {
+
+        int largeValue = Integer.MAX_VALUE - 100;
+        CreditAccount account = new CreditAccount(largeValue, 0, 0);
+        account.add(1000);
+
+        Assertions.assertTrue(account.getBalance() > 0);
+    }
 }
