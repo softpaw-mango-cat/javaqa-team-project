@@ -40,5 +40,13 @@ public class CreditAccountTest {
         Assertions.assertFalse(result);
         Assertions.assertEquals(0, account.getBalance());
     }
+    @Test
+    public void shouldAddToExistingBalance() {
+        CreditAccount account = new CreditAccount(1_000, 5_000, 15);
+        boolean result = account.add(500);
+
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(1_500, account.getBalance());
+    }
 
 }
