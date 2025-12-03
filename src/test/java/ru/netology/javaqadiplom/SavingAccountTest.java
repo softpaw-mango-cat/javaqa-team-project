@@ -3,6 +3,8 @@ package ru.netology.javaqadiplom;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class SavingAccountTest {
 
     /**
@@ -32,7 +34,7 @@ public class SavingAccountTest {
         int expected = 2_000;
         int actual = account.getBalance();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -48,7 +50,7 @@ public class SavingAccountTest {
         int expected = 2_000;
         int actual = account.getBalance();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -67,7 +69,7 @@ public class SavingAccountTest {
 
         int expected = 2_000;
         int actual = account.getBalance();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -86,7 +88,7 @@ public class SavingAccountTest {
         int expected = 10_000;
         int actual = account.getBalance();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -106,7 +108,7 @@ public class SavingAccountTest {
         int expected = 9_999;
         int actual = account.getBalance();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     /**
@@ -135,7 +137,7 @@ public class SavingAccountTest {
         int expected = 2_000;
         int actual = account.getBalance();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -151,7 +153,7 @@ public class SavingAccountTest {
         int expected = 2_000;
         int actual = account.getBalance();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -170,7 +172,7 @@ public class SavingAccountTest {
 
         int expected = 2_000;
         int actual = account.getBalance();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -189,7 +191,7 @@ public class SavingAccountTest {
 
         int expected = 1_000;
         int actual = account.getBalance();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
 
     }
 
@@ -209,6 +211,193 @@ public class SavingAccountTest {
 
         int expected = 1_001;
         int actual = account.getBalance();
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
+    }
+
+    // проверка метода yearChange
+    @Test
+    public void shouldReturnCorrectInterest() {
+        SavingAccount account = new SavingAccount(
+                2_000,
+                1_000,
+                10_000,
+                5
+        );
+
+        int expected = 100;
+        int actual = account.yearChange();
+
+        assertEquals(expected, actual);
+    }
+
+    /** проверка конструктора SavingAccount
+     - ставка не может быть нулевой (иначе будет деление на ноль)
+     - ставка не может быть отрицательной
+     - баланс счета, а также макс. и минимальный балансы неотрицательные числа
+     (проверки на неотрицат.числа делаем в первую очередь, потом идут проверки,
+     где есть взаимодействие параметров)
+
+     - минимальный баланс меньше максимального, или
+     максимальный баланс больше минимального (это одна проверка)
+     - минимальный баланс равен максимальному
+     - значение баланса аккаунта в интервале от минимального до
+     макс.значения включительно
+     */
+
+    @Test
+    public void shouldThrowExceptionWhenRateIsNegative() {
+
+        int testRate = -1;
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(2_000,
+                                1_000,
+                                10_000,
+                                testRate));
+
+        String expectedMessage =
+                "Накопительная ставка не может быть отрицательной, а у вас: " + testRate;
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenRateIsZero() {
+
+        int testRate = 0;
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(2_000,
+                                1_000,
+                                10_000,
+                                testRate));
+
+        String expectedMessage =
+                "Накопительная ставка не может быть нулевой, а у вас: " + testRate;
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenBalanceIsNegative() {
+
+        int initialBalance = -1_000;
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(initialBalance,
+                                1_000,
+                                10_000,
+                                5));
+
+        String expectedMessage =
+                "Баланс счёта не может быть отрицательным: " + initialBalance;
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenMinBalanceIsNegative() {
+
+        int minBalance = -1_000;
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(1_000,
+                                minBalance,
+                                10_000,
+                                5));
+
+        String expectedMessage =
+                "Минимальный баланс не может быть отрицательным: " + minBalance;
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenMaxBalanceIsNegative() {
+
+        int maxBalance = -10_000;
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(2_000,
+                                1_000,
+                                maxBalance,
+                                5));
+
+        String expectedMessage =
+                "Максимальный баланс не может быть отрицательным: " + maxBalance;
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenMinBalanceEqualsMaxBalance() {
+
+        int testMinBalance = 1_000;
+        int testMaxBalance = 1_000;
+
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(2_000,
+                                testMinBalance,
+                                testMaxBalance,
+                                5));
+        String expectedMessage =
+                "Минимальный баланс не может быть равен максимальному";
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenMinBalanceMoreThanMaxBalance() {
+
+        int testMinBalance = 2_000;
+        int testMaxBalance = 1_000;
+
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(2_000,
+                                testMinBalance,
+                                testMaxBalance,
+                                5));
+        String expectedMessage =
+                "Минимальный баланс не может быть больше максимального";
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenBalanceLessThanMinBalance() {
+
+        int testInitialBalance = 1_000;
+        int testMinBalance = 2_000;
+
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(testInitialBalance,
+                                testMinBalance,
+                                10_000,
+                                5));
+        String expectedMessage =
+                "Баланс счёта не может быть меньше минимального";
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenBalanceMoreThanMaxBalance() {
+
+        int testInitialBalance = 11_000;
+        int testMaxBalance = 10_000;
+
+        IllegalArgumentException exception = Assertions.assertThrows(
+                IllegalArgumentException.class, () ->
+                        new SavingAccount(testInitialBalance,
+                                1_000,
+                                testMaxBalance,
+                                5));
+        String expectedMessage =
+                "Баланс счёта не может быть больше максимального";
+
+        Assertions.assertEquals(expectedMessage, exception.getMessage());
     }
 }
