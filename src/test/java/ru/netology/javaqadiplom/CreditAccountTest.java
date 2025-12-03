@@ -30,5 +30,15 @@ public class CreditAccountTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new CreditAccount(0, -100, 15);
         });
+
     }
+    @Test
+    public void NotChangeBalanceIfPayIsMoreThanLimit() {
+        CreditAccount account = new CreditAccount(0, 5_000, 15);
+        boolean result = account.pay(6_000);
+
+        Assertions.assertFalse(result);
+        Assertions.assertEquals(0, account.getBalance());
+    }
+
 }
