@@ -52,8 +52,16 @@ public class CreditAccountTest {
     public void CalculateYearChangeForNegativeBalance() {
         CreditAccount account = new CreditAccount(-200, 5_000, 15);
         int actual = account.yearChange();
-        int expected = -30; 
+        int expected = -30;
 
         Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    public void CorrectlyCalculateBalanceAfterPay() {
+        CreditAccount account = new CreditAccount(100, 5_000, 15);
+        boolean result = account.pay(200);
+
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(-100, account.getBalance());
     }
 }
