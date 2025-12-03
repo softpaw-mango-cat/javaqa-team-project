@@ -64,4 +64,12 @@ public class CreditAccountTest {
         Assertions.assertTrue(result);
         Assertions.assertEquals(-100, account.getBalance());
     }
+    @Test
+    public void shouldHandleExtremelyLargeAmount() {
+        CreditAccount account = new CreditAccount(0, 5_000, 15);
+        boolean result = account.pay(Integer.MAX_VALUE);
+
+        Assertions.assertFalse(result);
+        Assertions.assertEquals(0, account.getBalance());
+    }
 }
