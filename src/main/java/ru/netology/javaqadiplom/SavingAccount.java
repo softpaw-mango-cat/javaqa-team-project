@@ -19,7 +19,7 @@ public class SavingAccount extends Account {
      * @param maxBalance - максимальный баланс
      * @param rate - неотрицательное число, ставка в процентах годовых на остаток
      */
-    // Issue #5, 6, 7, 8
+    // Issue #5, 6, 7, 8, 11
     public SavingAccount(int initialBalance, int minBalance, int maxBalance, int rate) {
         // 5. Проверка ставки
         if (rate < 0) {
@@ -49,6 +49,12 @@ public class SavingAccount extends Account {
         if (minBalance > maxBalance) {
             throw new IllegalArgumentException(
                     "Минимальный баланс не может быть больше максимального"
+            );
+        }
+        // 11. Проверка minBalance == maxBalance (точная формулировка из теста)
+        if (minBalance == maxBalance) {
+            throw new IllegalArgumentException(
+                    "Минимальный баланс не может быть равен максимальному"
             );
         }
     }
