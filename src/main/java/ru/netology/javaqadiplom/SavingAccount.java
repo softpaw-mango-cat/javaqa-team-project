@@ -64,13 +64,15 @@ public class SavingAccount extends Account {
      * @param amount
      * @return
      */
+    // Issue №2
     @Override
     public boolean add(int amount) {
         if (amount <= 0) {
             return false;
         }
-        if (balance + amount < maxBalance) {
-            balance = amount;
+        // Проверяем, не превысит ли пополнение максимальный баланс
+        if (balance + amount <= maxBalance) {  // Изменено с < на <=
+            balance = balance + amount;  //  добавляем amount к balance
             return true;
         } else {
             return false;
