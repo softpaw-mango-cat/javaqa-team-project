@@ -40,16 +40,19 @@ public class SavingAccount extends Account {
      * @param amount - сумма покупки
      * @return true если операция прошла успешно, false иначе.
      */
+    // Issue #4
     @Override
     public boolean pay(int amount) {
         if (amount <= 0) {
             return false;
         }
-        balance = balance - amount;
-        if (balance > minBalance) {
+
+        // Сначала проверяем, не станет ли баланс меньше минимального
+        if (balance - amount >= minBalance) {  // Проверка ДО изменения
+            balance = balance - amount;        // Только если проверка пройдена
             return true;
         } else {
-            return false;
+            return false;                      // Без изменения баланса
         }
     }
 
@@ -64,7 +67,7 @@ public class SavingAccount extends Account {
      * @param amount
      * @return
      */
-    // Issue №2
+    // Issue #2, #3
     @Override
     public boolean add(int amount) {
         if (amount <= 0) {
