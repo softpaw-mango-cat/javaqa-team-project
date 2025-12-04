@@ -81,4 +81,12 @@ public class CreditAccountTest {
 
         Assertions.assertTrue(account.getBalance() > 0);
     }
+    @Test
+    public void DecreaseBalanceByAmountOnSuccessfulPay() {
+        CreditAccount account = new CreditAccount(500, 5_000, 15);
+        boolean result = account.pay(200);
+
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(300, account.getBalance());
+    }
 }
