@@ -98,4 +98,74 @@ public class CreditAccountTest {
         Assertions.assertTrue(result);
         Assertions.assertEquals(300, account.getBalance());
     }
+    @Test
+    public void shouldThrowExceptionWhenRateIsZero() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new CreditAccount(0, 5_000, 0);
+        });
+    }
+    @Test
+    public void shouldReturnFalseWhenPayAmountIsZero() {
+        CreditAccount account = new CreditAccount(1000, 5000, 15);
+        boolean result = account.pay(0);
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void shouldReturnFalseWhenPayAmountIsNegative() {
+        CreditAccount account = new CreditAccount(1000, 5000, 15);
+        boolean result = account.pay(-100);
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void shouldPayWhenBalanceGoesNegativeWithinLimit() {
+        CreditAccount account = new CreditAccount(100, 5000, 15);
+        boolean result = account.pay(600); // -500 в пределах лимита
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(-500, account.getBalance());
+    }
+    @Test
+    public void shouldReturnFalseWhenAddAmountIsZero() {
+        CreditAccount account = new CreditAccount(1000, 5000, 15);
+        boolean result = account.add(0);
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void shouldReturnFalseWhenAddAmountIsNegative() {
+        CreditAccount account = new CreditAccount(1000, 5000, 15);
+        boolean result = account.add(-100);
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void shouldAddSuccessfullyWithoutOverflow() {
+        CreditAccount account = new CreditAccount(Integer.MAX_VALUE - 100, 5000, 15);
+        boolean result = account.add(100);
+        Assertions.assertTrue(result);
+        Assertions.assertEquals(Integer.MAX_VALUE, account.getBalance());
+    }
+    @Test
+    public void shouldReturnZeroForPositiveBalance() {
+        CreditAccount account = new CreditAccount(100, 5000, 15);
+        int result = account.yearChange();
+        Assertions.assertEquals(0, result);
+    }
+
+    @Test
+    public void shouldCalculateCorrectlyForNegativeBalance() {
+        CreditAccount account = new CreditAccount(0, 5000, 15);
+        account.pay(200);
+        int result = account.yearChange();
+        Assertions.assertEquals(-30, result); // -200 * 15 / 100 = -30
+    }
+
+    @Test
+    public void shouldHandleLargeNegativeBalance() {
+        CreditAccount account = new CreditAccount(0, 10000, 10);
+        account.pay(1000);
+        int result = account.yearChange();
+        Assertions.assertEquals(-100, result); // -1000 * 10 / 100 = -100
+    }
 }
