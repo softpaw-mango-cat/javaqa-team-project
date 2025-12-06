@@ -32,6 +32,7 @@ public class CreditAccountTest {
         });
 
     }
+
     @Test
     public void NotChangeBalanceIfPayIsMoreThanLimit() {
         CreditAccount account = new CreditAccount(0, 5_000, 15);
@@ -40,6 +41,7 @@ public class CreditAccountTest {
         Assertions.assertFalse(result);
         Assertions.assertEquals(0, account.getBalance());
     }
+
     @Test
     public void shouldAddToExistingBalance() {
         CreditAccount account = new CreditAccount(1_000, 5_000, 15);
@@ -48,14 +50,17 @@ public class CreditAccountTest {
         Assertions.assertTrue(result);
         Assertions.assertEquals(1_500, account.getBalance());
     }
+
     @Test
     public void CalculateYearChangeForNegativeBalance() {
-        CreditAccount account = new CreditAccount(-200, 5_000, 15);
+        CreditAccount account = new CreditAccount(0, 5_000, 15);
+        account.pay(200);
         int actual = account.yearChange();
         int expected = -30;
 
         Assertions.assertEquals(expected, actual);
     }
+
     @Test
     public void CorrectlyCalculateBalanceAfterPay() {
         CreditAccount account = new CreditAccount(100, 5_000, 15);
@@ -64,6 +69,7 @@ public class CreditAccountTest {
         Assertions.assertTrue(result);
         Assertions.assertEquals(-100, account.getBalance());
     }
+
     @Test
     public void shouldHandleExtremelyLargeAmount() {
         CreditAccount account = new CreditAccount(0, 5_000, 15);
@@ -72,15 +78,18 @@ public class CreditAccountTest {
         Assertions.assertFalse(result);
         Assertions.assertEquals(0, account.getBalance());
     }
+
     @Test
     public void NotOverflowOnLargeValues() {
 
         int largeValue = Integer.MAX_VALUE - 100;
-        CreditAccount account = new CreditAccount(largeValue, 0, 0);
-        account.add(1000);
+        CreditAccount account = new CreditAccount(largeValue, 0, 15);
+        boolean result = account.add(1000);
 
-        Assertions.assertTrue(account.getBalance() > 0);
+        Assertions.assertFalse(result);
+        Assertions.assertEquals(largeValue, account.getBalance());
     }
+
     @Test
     public void DecreaseBalanceByAmountOnSuccessfulPay() {
         CreditAccount account = new CreditAccount(500, 5_000, 15);

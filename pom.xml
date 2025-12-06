@@ -49,10 +49,47 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
+
+                        <!-- добавить, если нужно исключить из отчёта классы/методы классов -->
+                        <configuration>
+                            <excludes>
+                                <exclude>**/ru/netology/javaqadiplom/Account.class</exclude>
+                                <exclude>**/ru/netology/javaqadiplom/Bank.class</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <!-- добавить, если нужно исключить из проверки методы классов -->
+                                    <!--    <element>METHOD</element>
+                                        <excludes>
+                                            <exclude>ru/netology/.../Classname.class:get*</exclude>
+                                        </excludes> -->
+                                    <limits>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>100%</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                            <!-- ещё один блок со всеми исключениями из проверки -->
+                            <excludes>
+                                <exclude>**/ru/netology/javaqadiplom/Account.class</exclude>
+                                <exclude>**/ru/netology/javaqadiplom/Bank.class</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
+
 </project>
